@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donesta - Make a Difference</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: black;
+            --secondary: darkgreen;
+            --accent: black;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+
+        body {
+            background-color: white;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100; /* Header z-index */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            position: relative;
+        }
+
+        nav ul li {
+            margin: 0 8px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color:white;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            padding-left: 20px;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-dropdown {
+            padding-left:20px;
+            position: relative;
+            margin-left: 5px;
+        }
+
+        .profile-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-btn img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 8px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+            padding-left: 25px;
+        }
+
+        .dropdown-content a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        /* Banner Section */
+        .banner {
+            height: 80vh;
+            background: linear-gradient( rgba(0, 0, 0, 1) , rgba(0, 128, 0, 0.7) );
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            color: white;
+        }
+
+        .banner h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin-bottom: 40px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .donate-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .donate-btn:hover {
+            transform: translateY(-5px);
+            background:white;
+            color:black;
+        }
+
+        .donate-btn i {
+            margin-right: 10px;
+            font-size: 1.6rem;
+        }
+
+        /* Information Section */
+        .info-section {
+            padding: 80px 5%;
+            text-align: center;
+        }
+
+        .info-section h2 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .info-section h2:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: white;
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        /* Modal Styles - Fixed z-index and updated design */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Higher than header's z-index */
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .donation-modal {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transform: translateY(30px);
+            transition: transform 0.4s ease;
+        }
+        
+        .modal-overlay.active .donation-modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .modal-header h2 i {
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+        
+        .modal-content {
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .donation-form .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .donation-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .donation-form input,
+        .donation-form select,
+        .donation-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .donation-form input:focus,
+        .donation-form select:focus,
+        .donation-form textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 100, 0, 0.1);
+            background: white;
+        }
+        
+        .donation-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .food-type-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .food-type-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .food-type-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .food-type-item p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .btn-cancel {
+            background: #f1f1f1;
+            color: #333;
+        }
+        
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-submit {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .form-note {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 25px 0;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .banner h1 {
+                font-size: 2.8rem;
+            }
+            
+            .banner p {
+                font-size: 1.2rem;
+            }
+            
+            .header-right {
+                gap: 10px;
+            }
+            
+            nav ul li a span {
+                display: none;
+            }
+            
+            nav ul li a .nav-icon {
+                margin-right: 0;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .banner {
+                height: 70vh;
+            }
+            
+            .banner h1 {
+                font-size: 2.2rem;
+            }
+            
+            .donate-btn {
+                padding: 15px 35px;
+                font-size: 1.2rem;
+            }
+            
+            .info-section h2 {
+                font-size: 2.2rem;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-hands-helping"></i>
+            <span>Donesta</span>
+        </div>
+        
+        <div class="header-right">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="index.html#features">
+                            <i class="fas fa-info-circle nav-icon"></i>
+                            <span>About Us</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#contact_us">
+                            <i class="fas fa-envelope nav-icon"></i>
+                            <span>Contact Us</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <a href="doner4.html">
+            <button class="icon-btn">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+            </button>
+            </a>
+            <div class="profile-dropdown ">
+                <button class="profile-btn ">
+                    <img src="img/pro.jpg" alt="Profile">
+                    <span>Shalini S</span>
+                </button>
+                <div class="dropdown-content">
+                    <a href="donar6.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="donar6.html#History"><i class="fas fa-history"></i> History</a>
+                    <a href="donar6.html#Feedback"><i class="fas fa-comment-alt"></i> Feedback</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Banner Section -->
+    <section class="banner">
+        <h1>Make a Difference Today</h1>
+        <p>Join thousands of donors supporting causes that matter. Your contribution creates real change.</p>
+        <button class="donate-btn" id="openDonationModal">
+            <i class="fas fa-plus"></i>
+            Donate Now
+        </button>
+    </section>
+    
+    <!-- Information Section -->
+    <section class="info-section">
+        <h2>How This Is Useful</h2>
+        <div class="cards-container">
+            <!-- First Row -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-hands"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Direct Impact</h3>
+                    <p>Your donations go directly to verified organizations and causes, ensuring maximum impact with every contribution.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Global Reach</h3>
+                    <p>Support causes worldwide with our international network of nonprofit partners and community initiatives.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Secure & Transparent</h3>
+                    <p>We use bank-level security and provide full transparency on how your donations are utilized.</p>
+                </div>
+            </div>
+            
+            <!-- Second Row -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Track Your Impact</h3>
+                    <p>Receive regular updates and reports showing the tangible difference your donations are making.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-taxi"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Flexible Giving</h3>
+                    <p>Choose from one-time donations, monthly giving, or special campaigns that align with your values.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Tax Benefits</h3>
+                    <p>All donations are tax-deductible. We provide instant receipts for your financial records.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Food Donation Modal - Fixed and improved -->
+    <div class="modal-overlay" id="donationModal">
+        <div class="donation-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-utensils"></i> Food Donation Form</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form class="donation-form"  action="doner2.html">
+                    <div class="form-group">
+                        <label for="donorName">Your Name</label>
+                        <input type="text" id="donorName" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="donorEmail">Email</label>
+                        <input type="email" id="donorEmail" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="donorPhone">Phone</label>
+                        <input type="tel" id="donorPhone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorPhone">Food type</label>
+                        <input type="tel" id="donorfoodtype" placeholder="Enter Food type" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorPhone">Timing</label>
+                        <input type="tel" placeholder="Enter time pickup" required>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="foodQuantity">Quantity (approx.)</label>
+                        <select id="foodQuantity" required>
+                            <option value="" disabled selected>Select quantity</option>
+                            <option value="small">Small (1-5 meals)</option>
+                            <option value="medium">Medium (5-20 meals)</option>
+                            <option value="large">Large (20-50 meals)</option>
+                            <option value="x-large">Extra Large (50+ meals)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expiryDate">Best Before Date</label>
+                        <input type="date" placeholder="mm/dd/yyyy" required>
+                        <div class="form-note">Please enter in mm/dd/yyyy format</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pickupLocation">Pickup/Drop-off Location</label>
+                        <textarea id="pickupLocation" placeholder="Enter your full address for pickup/drop-off" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="specialNotes">Special Notes</label>
+                        <textarea id="specialNotes" placeholder="Any dietary restrictions, preparation notes, or special instructions"></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-cancel" id="cancelDonation">Cancel</button>
+                        
+                        <button type="submit" class="btn btn-submit">Submit Donation</button>
+                        
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const donationModal = document.getElementById('donationModal');
+        const openModalBtn = document.getElementById('openDonationModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelDonation');
+        const foodDonationForm = document.getElementById('foodDonationForm');
+        
+        // Open modal
+        openModalBtn.addEventListener('click', () => {
+            donationModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+        
+        // Close modal
+        function closeModal() {
+            donationModal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+        
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        
+        // Close modal when clicking outside content
+        donationModal.addEventListener('click', (e) => {
+            if (e.target === donationModal) {
+                closeModal();
+            }
+        });
+        
+        // Form submission
+        foodDonationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Date validation
+            const expiryDate = document.getElementById('expiryDate').value;
+            const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
+            
+            if (!datePattern.test(expiryDate)) {
+                alert('Please enter a valid date in mm/dd/yyyy format');
+                return;
+            }
+            
+            // Form data would be sent to server here
+            alert('Thank you for your donation! We will contact you shortly to arrange pickup.');
+            
+            // Reset form and close modal
+            foodDonationForm.reset();
+            closeModal();
+        });
+        
+        // Date input formatting
+        const expiryInput = document.getElementById('expiryDate');
+        expiryInput.addEventListener('input', function(e) {
+            // Format date as user types
+            let input = e.target.value.replace(/\D/g, '').substring(0, 8);
+            if (input.length > 4) {
+                input = input.substring(0, 2) + '/' + input.substring(2, 4) + '/' + input.substring(4);
+            } else if (input.length > 2) {
+                input = input.substring(0, 2) + '/' + input.substring(2);
+            }
+            e.target.value = input;
+        });
+    </script>
+</body>
+</html>

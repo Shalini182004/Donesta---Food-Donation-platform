@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donesta - Donor Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient( rgba(0, 0, 0, 1) , rgba(0, 128, 0, 0.7) );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #1c1e21;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width:700px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: darkgreen;
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 10px 0 5px;
+            color: #1c1e21;
+        }
+        
+        .subtitle {
+            font-size: 15px;
+            color: #606770;
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 15px;
+            color: #606770;
+            font-weight: 600;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e33;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        input:focus, select:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+        
+        .input-group {
+            display: flex;
+        }
+        
+        .input-group input {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-radius: 10px;
+        }
+        
+        .input-group-prepend {
+            background: #f5f6f7;
+            border: 1px solid #dddfe2;
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            color: #606770;
+        }
+        
+        .btn-detect {
+            background: #f5f6f7;
+            border: 1px solid #dddfe2;
+            border-left: none;
+            border-radius: 0 6px 6px 0;
+            padding: 0 14px;
+            cursor: pointer;
+            color: #1877f2;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-detect:hover {
+            background: #ebedf0;
+        }
+        
+        .upload-area {
+            border: 2px dashed #dddfe2;
+            border-radius: 6px;
+            padding: 25px;
+            text-align: center;
+            background: #fbfbfb;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #1877f2;
+            background: #f0f8ff;
+        }
+        
+        .upload-icon {
+            font-size: 40px;
+            color: #42b72a;
+            margin-bottom: 10px;
+        }
+        
+        .upload-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .upload-text {
+            font-size: 13px;
+            color: #606770;
+            margin-bottom: 10px;
+        }
+        
+        .btn-upload {
+            background: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-upload:hover {
+            background: #36a420;
+        }
+        
+        .policy {
+            font-size: 11px;
+            color: #777;
+            text-align: center;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+        
+        .policy a {
+            color: #1877f2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .policy a:hover {
+            text-decoration: underline;
+        }
+        
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            margin: 10px 0 15px;
+        }
+        
+        .terms input {
+            width: auto;
+            margin-right: 10px;
+            margin-top: 4px;
+        }
+        
+        .terms label {
+            font-size: 12px;
+            color: #606770;
+            text-align: left;
+        }
+        
+        .btn-register {
+            background: linear-gradient( rgba(0, 0, 0, 1) , rgba(0, 128, 0, 0.7) );
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 0;
+            width: 100%;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-register:hover {
+            background-color: #36a420;
+        }
+        
+        .login-link {
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #dadde1;
+            font-size: 15px;
+        }
+        
+        .login-link a {
+            color:darkgreen;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+            color: green;
+        }
+        
+        footer {
+            text-align: center;
+            color: #8a8d91;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Donesta</div>
+        <h1 class="title">Donor Registration</h1>
+        <p class="subtitle">Join our network to share surplus food with those in need</p>
+        
+        <form action="doner3.html">
+            <div class="form-group">
+                <label class="form-label required">Name</label>
+                <input type="text" placeholder="Enter your Name" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label required">Phone</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <input type="tel" placeholder="Enter your mobile number" required>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label required">Email</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <input type="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label required">Password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" placeholder="Create a password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label required">Organization Type</label>
+                    <select required>
+                        <option value="" selected disabled>Select type</option>
+                        <option>Hotel</option>
+                        <option>Restaurant</option>
+                        <option>Event Organizer</option>
+                        <option>Individual</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label required">Address</label>
+                <div class="input-group">
+                    <input type="text" placeholder="Enter your address" required>
+                    <div class="btn-detect">
+                        <i class="fas fa-location-dot"></i> Detect
+                    </div>
+                </div>
+                <p class="policy">We'll match you with nearby Organisation</p>
+            </div>
+            <div class="terms">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">
+                    I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a> <span class="text-danger">*</span>
+                </label>
+            </div>
+            
+            <p class="policy">
+                By clicking Register, you agree to our <a href="#">Terms</a>, <a href="#">Privacy Policy</a> and <a href="#">Cookies Policy</a>. 
+                You may receive SMS notifications from us and can opt out at any time.
+            </p>
+            
+            <button type="submit" class="btn-register">
+                <i class="fas fa-user-plus"></i> Register Now
+            </button>
+            
+            <div class="login-link">
+                Already have an account? <a href="doner_login.html">login</a>
+            </div>
+        </form>
+        
+        <footer>
+            © 2025 Donesta. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>

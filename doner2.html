@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donesta - for selecting organisation </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #4caf50;
+            --accent: #ffc107;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-green: #e8f5e9;
+        }
+        
+        body {
+            color: var(--dark);
+            margin-bottom: 0;
+            
+        }
+        /* Modal Styles - Full Width */
+        .modal {
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 100%;
+            margin: 0;
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .modal-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .search-container {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .search-bar {
+            flex: 1;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        
+        .filter-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0 25px;
+            margin-left: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .filter-btn i {
+            margin-right: 8px;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Organization Cards with Images */
+        .org-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+        
+        .org-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .org-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .org-image-container {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .org-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .org-card:hover .org-image {
+            transform: scale(1.05);
+        }
+        
+        .org-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            height: 40%;
+            z-index: 1;
+        }
+        
+        .org-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .org-name {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .org-details {
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .detail-item {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-item i {
+            width: 20px;
+            color: var(--primary);
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        
+        .distance {
+            display: flex;
+            align-items: center;
+            background: var(--light-green);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-top: 10px;
+            font-size: 0.9rem;
+            width: fit-content;
+        }
+        
+        .distance i {
+            margin-right: 6px;
+        }
+        
+        /* Checkbox Styling */
+        .select-container {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            margin-right: 10px;
+        }
+        
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 22px;
+            width: 22px;
+            background-color: #eee;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .custom-checkbox .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        .select-label {
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        /* Selected card style */
+        .org-card.selected {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+        
+        /* Submit Section */
+        .submit-section {
+            padding: 20px;
+
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .selection-info {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        .selection-count {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin: 0 5px;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+        }
+        
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(46, 125, 50, 0.4);
+        }
+        
+        .submit-btn i {
+            margin-right: 10px;
+        }
+        
+        /* Footer */
+        .modal-footer {
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: var(--gray);
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .search-container,
+            .modal-body,
+            .submit-section,
+            .modal-footer {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .org-cards {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .modal-header h2 {
+                font-size: 1.9rem;
+            }
+            
+            .org-image-container {
+                height: 180px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 15px;
+                padding: 12px;
+                justify-content: center;
+            }
+            
+            .submit-section {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .modal-header {
+                padding: 20px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-header h2 {
+                font-size: 1.6rem;
+            }
+            
+            .modal-header p {
+                font-size: 0.95rem;
+            }
+            
+            .org-image-container {
+                height: 160px;
+            }
+            
+            .org-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Select Organizations for Food Donation</h2>
+                <p>Choose one or more nearby organizations to donate food or resources</p>
+                <button class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by organization name or location...">
+                </div>
+                <button class="filter-btn">
+                    <i class="fas fa-filter"></i> Filter Options
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="org-cards">
+                    <!-- Card 1 -->
+                    <div class="org-card" data-id="1">
+                        <div class="org-image-container">
+                            <img src="img/22.png" alt="Green Earth Foundation" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">NGO</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Green Earth Foundation</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-building"></i>
+                                    <span>Food distribution center</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Cooked meals</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>1.2 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="1">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="org-card" data-id="2">
+                        <div class="org-image-container">
+                            <img src="img/23.png" alt="Sunshine Children's Home" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Orphanage</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Sunshine Children's Home</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-child"></i>
+                                    <span>Supports 45 children</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Fresh meals</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>0.8 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="2">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3 -->
+                    <div class="org-card" data-id="3">
+                        <div class="org-image-container">
+                            <img src="img/22.png" alt="Community Food Trust" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Trust</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Community Food Trust</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Serves 200+ families</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Non-perishables</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>1.5 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="3">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4 -->
+                    <div class="org-card" data-id="4">
+                        <div class="org-image-container">
+                            <img src="img/23.png" alt="Meals for All" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Food Bank</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Meals for All</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-warehouse"></i>
+                                    <span>Large storage facility</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Packaged food</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>2.3 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="4">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 5 -->
+                    <div class="org-card" data-id="5">
+                        <div class="org-image-container">
+                            <img src="img/22.png" alt="Hope for Humanity" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Charity</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Hope for Humanity</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Downtown community center</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: All food types</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>3.1 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="5">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 6 -->
+                    <div class="org-card" data-id="6">
+                        <div class="org-image-container">
+                            <img src="img/23.png" alt="Fresh Harvest" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Food Bank</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Fresh Harvest</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Daily distribution</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Fresh produce</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>1.8 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="6">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 7 -->
+                    <div class="org-card" data-id="7">
+                        <div class="org-image-container">
+                            <img src="img/23.png" alt="Helping Hands" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">NGO</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Helping Hands</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Serves homeless community</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Cooked meals</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>2.5 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="7">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 8 -->
+                    <div class="org-card" data-id="8">
+                        <div class="org-image-container">
+                            <img src="img/22.png" alt="Little Angels Home" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Orphanage</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Little Angels Home</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-child"></i>
+                                    <span>Cares for 30 children</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Snacks, Dairy</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>3.7 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="8">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 9 -->
+                    <div class="org-card" data-id="9">
+                        <div class="org-image-container">
+                            <img src="img/22.png" alt="Faith Community Trust" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Trust</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Faith Community Trust</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-hands"></i>
+                                    <span>Community outreach</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Any food</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>1.9 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="9">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 10 -->
+                    <div class="org-card" data-id="10">
+                        <div class="org-image-container">
+                            <img src="img/23.png" alt="Eco Food Initiative" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">NGO</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Eco Food Initiative</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-recycle"></i>
+                                    <span>Sustainable food program</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Organic products</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>4.2 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="10">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 11 -->
+                    <div class="org-card" data-id="11">
+                        <div class="org-image-container">
+                            <img src="img/23.png" alt="Neighbors in Need" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Community</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Neighbors in Need</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                    <span>Local support group</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Homemade meals</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>0.5 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="11">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 12 -->
+                    <div class="org-card" data-id="12">
+                        <div class="org-image-container">
+                            <img src="img/22.png" alt="Daily Bread Network" class="org-image">
+                            <div class="image-overlay"></div>
+                            <span class="org-type">Food Bank</span>
+                        </div>
+                        <div class="org-content">
+                            <h3 class="org-name">Daily Bread Network</h3>
+                            <div class="org-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-network-wired"></i>
+                                    <span>City-wide distribution</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Accepts: Bakery items</span>
+                                </div>
+                            </div>
+                            <div class="distance">
+                                <i class="fas fa-location-arrow"></i>
+                                <span>2.8 km away</span>
+                            </div>
+                            <div class="select-container">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" class="org-checkbox" data-id="12">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <span class="select-label">Select this organization</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <div class="selection-info">
+                    <span>Selected <span id="selectedCount">0</span> organizations</span>
+                </div>
+                <button class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> Donate to Selected Organizations
+                </button>
+            </div>
+            
+            <div class="modal-footer">
+                <p>Donesta - Connecting donors with organizations in need since 2025</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+    

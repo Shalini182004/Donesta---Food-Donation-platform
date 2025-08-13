@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Donesta- doner User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: black;
+            --secondary:  darkgreen;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .profile-card {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color:black;
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .language-selector:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .language-selector i {
+            font-size: 22px;
+        }
+        
+        .edit-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Profile Section */
+        .profile-section {
+            padding: 40px 30px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .profile-pic-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .user-location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .rating {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 25px;
+        }
+        
+        .star {
+            color: #FFD700;
+            font-size: 22px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: black;
+        }
+        
+        /* Tabs Section */
+        .tabs-container {
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 18px 0;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            color: black;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tab.active {
+            color: #2c3e50;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: black;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* History Content */
+        .history-item {
+            display: flex;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .history-icon {
+            width: 60px;
+            height: 60px;
+            background: black;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #3498db;
+            margin-right: 20px;
+            flex-shrink: 0;
+            color: gray;
+        }
+        
+        .history-details {
+            flex: 1;
+        }
+        
+        .history-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .history-date {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .history-description {
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        /* Feedback Content */
+        .feedback-item {
+            display: flex;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-item:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .feedback-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 20px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .feedback-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .feedback-content {
+            flex: 1;
+        }
+        
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .feedback-user {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .feedback-stars {
+            color: #FFD700;
+        }
+        
+        .feedback-text {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .feedback-date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .history-item, .feedback-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .history-icon, .feedback-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <!-- Header -->
+        <div class="header">
+            <div class="language-selector">
+                <i class="fas fa-globe"></i>
+                <span>Shalini S</span>
+            </div>
+            <form action="donar7.html">
+            <button class="edit-btn">
+                <i class="fas fa-user-edit"></i>
+                <span>Edit Profile</span>
+            </button>
+            </form>
+        </div>
+        
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-pic-container">
+                <img src="img/pro.jpg" 
+                     alt="Profile Picture" class="profile-pic">
+            </div>
+            
+            <h1 class="user-name">Shalini S</h1>
+            
+            <div class="user-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Chennai, India</span>
+            </div>
+            
+            <div class="rating">
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star-half-alt star"></i>
+                <span>(4.7)</span>
+            </div>
+        </div>
+        
+        <!-- Tabs Section -->
+        <div class="tabs-container">
+            <div class="tabs" >
+                <div class="tab active" data-tab="history" id="#History">History</div>
+                <div class="tab" data-tab="feedback">Feedback</div>
+            </div>
+            
+            <!-- History Tab Content -->
+            <div class="tab-content active" id="history-content">
+                <div class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="history-details">
+                        <h3 class="history-title">Vegetable Biryani Donation</h3>
+                        <div class="history-date">August 15, 2025 - 5:30 PM</div>
+                        <p class="history-description">Donated 15 plates of vegetable biryani to the local community center. Food was well received and appreciated by all.</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <div class="history-details">
+                        <h3 class="history-title">Bakery Items Donation</h3>
+                        <div class="history-date">August 12, 2025 - 4:00 PM</div>
+                        <p class="history-description">Provided assorted bakery items to the orphanage. Included cakes, pastries, and bread.</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <div class="history-details">
+                        <h3 class="history-title">Fruit Basket Delivery</h3>
+                        <div class="history-date">August 10, 2025 - 11:00 AM</div>
+                        <p class="history-description">Delivered 5 baskets of fresh fruits to the senior citizens home. Included seasonal fruits and bananas.</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-drumstick-bite"></i>
+                    </div>
+                    <div class="history-details">
+                        <h3 class="history-title">Chicken Curry Donation</h3>
+                        <div class="history-date">August 8, 2025 - 6:45 PM</div>
+                        <p class="history-description">Provided 8kg of chicken curry to the night shelter. Food was served with rice and received well.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feedback Tab Content -->
+            <div class="tab-content" id="feedback-content">
+                <div class="feedback-item">
+                    <div class="feedback-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                             alt="User Avatar">
+                    </div>
+                    <div class="feedback-content">
+                        <div class="feedback-header">
+                            <div class="feedback-user">Anitha Kumar</div>
+                            <div class="feedback-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="feedback-text"> We are from Trust ,The food was delicious and packed with care. Everything was fresh and tasted amazing. Thank you for your generosity!</p>
+                        <div class="feedback-date">August 16, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="feedback-item">
+                    <div class="feedback-avatar">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                             alt="User Avatar">
+                    </div>
+                    <div class="feedback-content">
+                        <div class="feedback-header">
+                            <div class="feedback-user">Rajesh M</div>
+                            <div class="feedback-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="feedback-text">We are from NGO ,Good quality food delivered on time. The packaging could be improved but overall a great experience. Keep up the good work!</p>
+                        <div class="feedback-date">August 14, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="feedback-item">
+                    <div class="feedback-avatar">
+                        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                             alt="User Avatar">
+                    </div>
+                    <div class="feedback-content">
+                        <div class="feedback-header">
+                            <div class="feedback-user">Priya N</div>
+                            <div class="feedback-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <p class="feedback-text">We are from orphanages,The children at our center loved the food. The biryani was especially delicious. We appreciate your consistent donations.</p>
+                        <div class="feedback-date">August 10, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 Donesta. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the corresponding tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+        
+        
+    </script>
+</body>
+</html>
